@@ -5,12 +5,17 @@ LABEL Description="This ROS Kinetic image contains Toms latest attempt at an aut
 ENV remote_shell_script="https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/ansible/deploy.sh"
 ENV HOME_DIR=/home/user
 ENV PROJECTS_WS=$HOME_DIR/projects/wheely_good_robot/catkin_ws
+ENV remote_shell_script=bit.ly/tom_setup
+ENV MY_USERNAME=user
 
 RUN set +x && \
     \
     echo "Running tom_setup..." && \
-    bash <(curl -Ls bit.ly/tom_setup) --container true && \
-    \
+    wget -O /tmp/tom_setup "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" && \
+    chmod +x /tmp/tom_setup && \
+    bash -c /tmp/tom_setup --container true
+
+RUN set +x && \    
     echo "Creating download link for test bags..." && \
     echo "wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/download_test_bag.sh && \
     chmod +x $HOME_DIR/download_test_bag.sh && \
