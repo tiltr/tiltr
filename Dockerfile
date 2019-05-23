@@ -13,12 +13,13 @@ RUN set +x && \
     echo "Running tom_setup..." && \
     wget -O /tmp/tom_setup "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" && \
     chmod +x /tmp/tom_setup && \
-    bash -c /tmp/tom_setup --container true
-
-RUN set +x && \    
+    bash -c /tmp/tom_setup --container true && \
+    \
     echo "Creating download link for test bags..." && \
     echo "wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/download_test_bag.sh && \
+    echo "roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:=${HOME}/Downloads/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/run_demo.sh && \
     chmod +x $HOME_DIR/download_test_bag.sh && \
+    chmod +x $HOME_DIR/run_demo.sh && \
     \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
@@ -30,8 +31,12 @@ RUN set +x && \
     wstool update -t src && \
     echo "Installing cartographers ROS dependencies..." && \
     \
-    src/cartographer/scripts/install_proto3.sh && \
-    sudo rosdep init; exit 0 && \
+    src/cartographer/scripts/install_proto3.sh
+    
+RUN set +x && \        
+    sudo rosdep init; exit 0
+    
+RUN set +x && \        
     rosdep update && \
     \
     cd $PROJECTS_WS && \    
@@ -41,6 +46,7 @@ RUN set +x && \
     source /opt/ros/kinetic/setup.bash && \
     echo "Installing cartographer..." && \
     catkin_make_isolated --install --use-ninja && \
+    echo "source /opt/ros/kinetic/setup.bash" >> $HOME_DIR/.bashrc && \
     echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc
 
 
