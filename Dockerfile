@@ -24,7 +24,7 @@ RUN set +x && \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
     sudo apt-get update && \
-    sudo apt-get install -y python-wstool python-rosdep ninja-build && \
+    sudo apt-get install -y python-wstool python-rosdep ninja-build ros-kinetic-rplidar-ros && \
     cd $PROJECTS_WS && \
     wstool init src && \
     wstool merge -t src https://raw.githubusercontent.com/googlecartographer/cartographer_ros/master/cartographer_ros.rosinstall && \
