@@ -31,12 +31,18 @@ RUN set +x && \
     echo "Installing cartographers ROS dependencies..." && \
     \
     src/cartographer/scripts/install_proto3.sh && \
-    sudo rosdep init && \
+    sudo rosdep init; exit 0 && \
     rosdep update && \
+    \
+    cd $PROJECTS_WS && \    
     rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y && \
     \
+    cd $PROJECTS_WS && \    
+    source /opt/ros/kinetic/setup.bash && \
     echo "Installing cartographer..." && \
-    catkin_make_isolated --install --use-ninja
+    catkin_make_isolated --install --use-ninja && \
+    echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc
+
 
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
