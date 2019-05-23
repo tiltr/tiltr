@@ -50,7 +50,6 @@ RUN set +x && \
     echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc
 
 
-
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 CMD ["/usr/bin/terminator"]
