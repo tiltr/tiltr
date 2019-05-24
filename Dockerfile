@@ -2,11 +2,11 @@ FROM shadowrobot/build-tools:xenial-kinetic-ide
 
 LABEL Description="This ROS Kinetic image contains Toms latest attempt at an autonomous mobile manipulator" Version="1.0"
 
-ENV remote_shell_script="https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/ansible/deploy.sh"
 ENV HOME_DIR=/home/user
 ENV PROJECTS_WS=$HOME_DIR/projects/wheely_good_robot/catkin_ws
 ENV remote_shell_script=bit.ly/tom_setup
 ENV MY_USERNAME=user
+USER $MY_USERNAME
 
 RUN set +x && \
     \
@@ -15,11 +15,17 @@ RUN set +x && \
     chmod +x /tmp/tom_setup && \
     bash -c /tmp/tom_setup --container true && \
     \
-    echo "Creating download link for test bags..." && \
+    echo "Creating download links for test bags..." && \
     echo "wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/download_test_bag.sh && \
-    echo "roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:=${HOME}/Downloads/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/run_demo.sh && \
     chmod +x $HOME_DIR/download_test_bag.sh && \
-    chmod +x $HOME_DIR/run_demo.sh && \
+    \    
+    echo "roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:=${HOME}/Downloads/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/run_demo.sh && \
+    chmod +x $HOME_DIR/run_demo.sh && \    
+    \
+    echo "wget -P ~/Downloads https://github.com/ElliWhite/proj515_ws/raw/master/map/303/303_pushing.bag" >> $HOME_DIR/download_303_bag.sh && \    
+    echo "roslaunch cartographer_ros play_2d_scan.launch bag_filename:=${HOME}/Downloads/303_pushing.bag" >> $HOME_DIR/run_303_bag.sh && \    
+    chmod +x $HOME_DIR/run_303_bag.sh && \        
+    chmod +x $HOME_DIR/download_303_bag.sh && \            
     \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
@@ -49,6 +55,7 @@ RUN set +x && \
     echo "source /opt/ros/kinetic/setup.bash" >> $HOME_DIR/.bashrc && \
     echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc
 
+USER root
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
