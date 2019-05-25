@@ -53,7 +53,10 @@ RUN set +x && \
     echo "Installing cartographer..." && \
     catkin_make_isolated --install --use-ninja && \
     echo "source /opt/ros/kinetic/setup.bash" >> $HOME_DIR/.bashrc && \
-    echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc
+    echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc && \
+    \
+    echo "Adding user to dialout group..." && \
+    sudo usermod -a -G dialout $MY_USERNAME
 
 USER root
 
