@@ -1,0 +1,4 @@
+5.65 thin
+2.5 deep
+
+35.8mm wide + 5mm hub = 40.8mm
