@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:AS5600-breakout-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -31,7 +31,7 @@ U 1 1 5CF7799C
 P 3250 2850
 F 0 "C1" H 3428 2896 50  0000 L CNN
 F 1 "100nF" H 3428 2805 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D6.3mm_P2.50mm" H 3250 2850 50  0001 C CNN
+F 2 "Capacitor_THT:C_Disc_D4.7mm_W2.5mm_P5.00mm" H 3250 2850 50  0001 C CNN
 F 3 "~" H 3250 2850 50  0001 C CNN
 	1    3250 2850
 	1    0    0    -1  
@@ -42,7 +42,7 @@ U 1 1 5CF77A7D
 P 3900 2850
 F 0 "C2" H 4078 2896 50  0000 L CNN
 F 1 "1uF" H 4078 2805 50  0000 L CNN
-F 2 "Capacitor_THT:CP_Radial_D8.0mm_P3.50mm" H 3900 2850 50  0001 C CNN
+F 2 "Capacitor_THT:CP_Radial_D5.0mm_P2.00mm" H 3900 2850 50  0001 C CNN
 F 3 "~" H 3900 2850 50  0001 C CNN
 	1    3900 2850
 	1    0    0    -1  
@@ -110,17 +110,6 @@ F 3 "" H 3900 3350 50  0001 C CNN
 	1    3900 3350
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR0104
-U 1 1 5CF77EB2
-P 5200 2850
-F 0 "#PWR0104" H 5200 2600 50  0001 C CNN
-F 1 "GND" H 5205 2677 50  0000 C CNN
-F 2 "" H 5200 2850 50  0001 C CNN
-F 3 "" H 5200 2850 50  0001 C CNN
-	1    5200 2850
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	5350 2300 5350 2350
 Wire Wire Line
@@ -129,32 +118,6 @@ Wire Wire Line
 	5200 2450 5650 2450
 Wire Wire Line
 	5650 2450 5650 2400
-$Comp
-L Connector_Generic:Conn_01x02 J1
-U 1 1 5CF78367
-P 5400 2650
-F 0 "J1" H 5480 2642 50  0000 L CNN
-F 1 "Conn_01x02" H 5480 2551 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5400 2650 50  0001 C CNN
-F 3 "~" H 5400 2650 50  0001 C CNN
-	1    5400 2650
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5200 2550 5200 2650
-Wire Wire Line
-	5200 2750 5200 2850
-$Comp
-L Connector:Conn_01x05_Female J3
-U 1 1 5CF784F9
-P 6900 2500
-F 0 "J3" H 6927 2526 50  0000 L CNN
-F 1 "Conn_01x05_Female" H 6927 2435 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 6900 2500 50  0001 C CNN
-F 3 "~" H 6900 2500 50  0001 C CNN
-	1    6900 2500
-	1    0    0    -1  
-$EndComp
 Text GLabel 5750 2450 2    50   Input ~ 0
 SDA
 Text GLabel 6050 2350 2    50   Input ~ 0
@@ -186,7 +149,7 @@ U 1 1 5CF78AF4
 P 4800 1400
 F 0 "J4" H 4773 1330 50  0000 R CNN
 F 1 "Conn_01x03_Male" H 4773 1421 50  0000 R CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 4800 1400 50  0001 C CNN
+F 2 "AS5600-breakout:SOIC127_solder_switch" H 4800 1400 50  0001 C CNN
 F 3 "~" H 4800 1400 50  0001 C CNN
 	1    4800 1400
 	-1   0    0    1   
@@ -262,36 +225,15 @@ F 3 "" H 6600 2200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6700 2300 6600 2300
-Wire Wire Line
 	6600 2300 6600 2200
-Text GLabel 6600 2400 0    50   Input ~ 0
+Text GLabel 6600 2600 0    50   Input ~ 0
 SDA
 Text GLabel 6600 2500 0    50   Input ~ 0
 SCL
 Wire Wire Line
-	6700 2400 6600 2400
-Wire Wire Line
-	6700 2500 6600 2500
-$Comp
-L power:GND #PWR0110
-U 1 1 5CF7A497
-P 6600 2750
-F 0 "#PWR0110" H 6600 2500 50  0001 C CNN
-F 1 "GND" H 6605 2577 50  0000 C CNN
-F 2 "" H 6600 2750 50  0001 C CNN
-F 3 "" H 6600 2750 50  0001 C CNN
-	1    6600 2750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6700 2700 6600 2700
-Wire Wire Line
 	6600 2700 6600 2750
-Text GLabel 6600 2600 0    50   Input ~ 0
+Text GLabel 6600 2400 0    50   Input ~ 0
 OUT
-Wire Wire Line
-	6700 2600 6600 2600
 $Comp
 L power:+5V #PWR0111
 U 1 1 5CF7ABC9
@@ -325,4 +267,69 @@ Wire Wire Line
 Connection ~ 3600 2250
 Wire Wire Line
 	3600 2250 4200 2250
+$Comp
+L Connector:Conn_01x05_Female J3
+U 1 1 5CF784F9
+P 6900 2500
+F 0 "J3" H 6927 2526 50  0000 L CNN
+F 1 "Conn_01x05_Female" H 6927 2435 50  0000 L CNN
+F 2 "Connector_Molex:Molex_KK-254_AE-6410-05A_1x05_P2.54mm_Vertical" H 6900 2500 50  0001 C CNN
+F 3 "~" H 6900 2500 50  0001 C CNN
+	1    6900 2500
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	6700 2300 6600 2300
+Wire Wire Line
+	6700 2600 6600 2600
+Wire Wire Line
+	6600 2700 6700 2700
+$Comp
+L power:GND #PWR0104
+U 1 1 5CFD15D0
+P 6600 2750
+F 0 "#PWR0104" H 6600 2500 50  0001 C CNN
+F 1 "GND" H 6605 2577 50  0000 C CNN
+F 2 "" H 6600 2750 50  0001 C CNN
+F 3 "" H 6600 2750 50  0001 C CNN
+	1    6600 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6700 2400 6600 2400
+Wire Wire Line
+	6600 2500 6700 2500
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5CFDB7FC
+P 4750 3050
+F 0 "H1" H 4850 3096 50  0000 L CNN
+F 1 "MountingHole" H 4850 3005 50  0000 L CNN
+F 2 "AS5600-breakout:MountingHole_2.2mm_M2_small" H 4750 3050 50  0001 C CNN
+F 3 "~" H 4750 3050 50  0001 C CNN
+	1    4750 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5CFDC0C0
+P 5050 3050
+F 0 "H2" H 5150 3096 50  0000 L CNN
+F 1 "MountingHole" H 5150 3005 50  0000 L CNN
+F 2 "AS5600-breakout:MountingHole_2.2mm_M2_small" H 5050 3050 50  0001 C CNN
+F 3 "~" H 5050 3050 50  0001 C CNN
+	1    5050 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5CFDC689
+P 5350 3050
+F 0 "H3" H 5450 3096 50  0000 L CNN
+F 1 "MountingHole" H 5450 3005 50  0000 L CNN
+F 2 "AS5600-breakout:MountingHole_2.2mm_M2_small" H 5350 3050 50  0001 C CNN
+F 3 "~" H 5350 3050 50  0001 C CNN
+	1    5350 3050
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
