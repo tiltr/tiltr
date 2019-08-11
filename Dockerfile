@@ -58,6 +58,19 @@ RUN set +x && \
     echo "Adding user to dialout group..." && \
     sudo usermod -a -G dialout $MY_USERNAME
 
+RUN set +x && \        
+    cd ~/ && wget https://www.arduino.cc/download_handler.php?f=/arduino-1.8.9-linux64.tar.xz && \
+    tar -xJf arduino-1.8.9-linux64.tar.xz && \
+    rm arduino-1.8.9-linux64.tar.xz && \
+    cd arduino-1.8.9 && \
+    sudo ./install.sh && \
+    cd ~/Arduino/libraries && \
+    wget https://raw.githubusercontent.com/tiltr/tiltr-firmware/master/libraries && \
+    while read repo; do git clone "$repo"; done < libraries && \
+    cd ~/Arduino && \
+    git clone https://github.com/tiltr/tiltr-firmware && \
+
+
 USER root
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
