@@ -64,6 +64,9 @@ RUN set +x && \
     rm arduino-1.8.9-linux64.tar.xz && \
     cd arduino-1.8.9 && \
     sudo ./install.sh && \
+    PATH=$PATH:/home/user/arduino-1.8.9/bin && \
+    curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh && \
+    arduino-cli core update-index --additional-url shttps://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json && \
     cd ~/Arduino/libraries && \
     wget https://raw.githubusercontent.com/tiltr/tiltr-firmware/master/libraries && \
     while read repo; do git clone "$repo"; done < libraries && \
