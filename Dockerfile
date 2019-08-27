@@ -72,7 +72,7 @@ RUN set +x && \
     while read repo; do git clone "$repo"; done < libraries && \
     cd ~/Arduino && \
     git clone https://github.com/tiltr/tiltr-firmware && \
-    arduino-cli lib install "MPU6040"
+    arduino-cli lib install "MPU6050"
 
 
 USER root
