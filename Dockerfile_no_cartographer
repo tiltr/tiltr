@@ -62,7 +62,7 @@ RUN set +x && \
     cd ~/Arduino/libraries && \
     git clone https://github.com/jrowberg/i2cdevlib && \
     cp -r i2cdevlib/Arduino/I2Cdev/ . && \
-    cp -r i2cdevlib/Arduino/MPU6060/ . && \
+    cp -r i2cdevlib/Arduino/MPU6050/ . && \
     rm -rf i2cdevlib && \
     cd ~/Arduino && \
     git clone https://github.com/tiltr/tiltr-firmware 
