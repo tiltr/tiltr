@@ -1,0 +1,8 @@
+host:
+code --install-extension ms-vscode-remote.remote-containers
+
+
+container:
+wget https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable -O /tmp/vscode.deb
+sudo apt-get install /tmp/vscode.deb
+code --install-extension platformio.platformio-ide
