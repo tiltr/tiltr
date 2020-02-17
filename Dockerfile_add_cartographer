@@ -34,9 +34,7 @@ RUN set +x && \
     sudo rosdep init || exit 0 && \        
     rosdep update && \
     cd $PROJECTS_WS && \    
-    rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y
-
-RUN set +x && \
+    rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y && \
     source /opt/ros/kinetic/setup.bash && \
     echo "Installing cartographer (catkin_make_isolated)..." && \
     \
