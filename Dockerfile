@@ -1,78 +1,74 @@
 FROM shadowrobot/build-tools:xenial-kinetic-ide
 
-LABEL Description="This ROS Kinetic image contains Toms latest attempt at an autonomous mobile manipulator" Version="1.0"
+LABEL Description="This ROS Kinetic image contains tiltrs dev environment (and eventually it's onboard ros stuff)" Version="1.0"
 
 ENV HOME_DIR=/home/user
 ENV PROJECTS_WS=$HOME_DIR/projects/wheely_good_robot/catkin_ws
 ENV remote_shell_script=bit.ly/tom_setup
 ENV MY_USERNAME=user
 USER $MY_USERNAME
+ENV PATH="/home/user/arduino-1.8.9/bin:${PATH}"
 
 RUN set +x && \
     \
     echo "Running tom_setup..." && \
     wget -O /tmp/tom_setup "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" && \
     chmod +x /tmp/tom_setup && \
-    bash -c /tmp/tom_setup --container true && \
-    \
-    echo "Creating download links for test bags..." && \
-    echo "wget -P ~/Downloads https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/download_test_bag.sh && \
-    chmod +x $HOME_DIR/download_test_bag.sh && \
-    \    
-    echo "roslaunch cartographer_ros demo_backpack_2d.launch bag_filename:=${HOME}/Downloads/cartographer_paper_deutsches_museum.bag" >> $HOME_DIR/run_demo.sh && \
-    chmod +x $HOME_DIR/run_demo.sh && \    
-    \
-    echo "wget -P ~/Downloads https://github.com/ElliWhite/proj515_ws/raw/master/map/303/303_pushing.bag" >> $HOME_DIR/download_303_bag.sh && \    
-    echo "roslaunch cartographer_ros play_2d_scan.launch bag_filename:=${HOME}/Downloads/303_pushing.bag" >> $HOME_DIR/run_303_bag.sh && \    
-    chmod +x $HOME_DIR/run_303_bag.sh && \        
-    chmod +x $HOME_DIR/download_303_bag.sh && \            
+    bash -c "/tmp/tom_setup -s true -b true -t true" && \
     \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
     sudo apt-get update && \
-    sudo apt-get install -y python-wstool python-rosdep ninja-build ros-kinetic-rplidar-ros && \
+    sudo apt-get install -y python-wstool python-rosdep ninja-build ros-kinetic-rosserial-arduino ros-kinetic-rosserial && \
     cd $PROJECTS_WS && \
     wstool init src && \
-    wstool merge -t src https://raw.githubusercontent.com/carebare47/cartographer_ros/master/cartographer_ros.rosinstall && \
     wstool update -t src && \
-    echo "Installing cartographers ROS dependencies..." && \
-    \
-    src/cartographer/scripts/install_proto3.sh
-    
-RUN set +x && \        
-    sudo rosdep init; exit 0
-    
-RUN set +x && \        
+    sudo rm -rf /etc/ros/rosdep/sources.list.d/20-default.list && \
+    sudo rosdep init || exit 0 && \        
     rosdep update && \
-    \
-    cd $PROJECTS_WS && \    
     rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y && \
-    \
-    cd $PROJECTS_WS && \    
     source /opt/ros/kinetic/setup.bash && \
-    echo "Installing cartographer..." && \
-    catkin_make_isolated --install --use-ninja && \
     echo "source /opt/ros/kinetic/setup.bash" >> $HOME_DIR/.bashrc && \
-    echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc && \
     \
     echo "Adding user to dialout group..." && \
-    sudo usermod -a -G dialout $MY_USERNAME
-
-RUN set +x && \        
-    cd ~/ && wget https://www.arduino.cc/download_handler.php?f=/arduino-1.8.9-linux64.tar.xz && \
+    sudo usermod -a -G dialout $MY_USERNAME && \      
+    \
+    echo "Fetching arduino-1.8.9, extracting & installing..." && \  
+    cd ~/ && wget https://downloads.arduino.cc/arduino-1.8.9-linux64.tar.xz && \
     tar -xJf arduino-1.8.9-linux64.tar.xz && \
     rm arduino-1.8.9-linux64.tar.xz && \
-    cd arduino-1.8.9 && \
+    cd arduino-1.8.9 && \	
     sudo ./install.sh && \
-    PATH=$PATH:/home/user/arduino-1.8.9/bin && \
+    \
+    echo "Installing arduino-cli..." && \  
     curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh && \
-    arduino-cli core update-index --additional-url shttps://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json && \
+    \
+    echo "Adding nucleo-F446RE to boards list & installing..." && \  
+    touch $HOME_DIR/arduino-1.8.9/bin/arduino-cli.yaml && \
+    echo -e "board_manager:\n additional_urls:\n   - https://github.com/stm32duino/BoardManagerFiles/raw/master/STM32/package_stm_index.json" >> $HOME_DIR/arduino-1.8.9/bin/arduino-cli.yaml && \
+    cd $HOME_DIR/arduino-1.8.9/bin/ && \
+    arduino-cli core update-index && \
+    arduino-cli core install STM32:stm32 && \
+    \
+    echo "Fetching arduino library list" && \
+    mkdir -p ~/Arduino/libraries && \
     cd ~/Arduino/libraries && \
-    wget https://raw.githubusercontent.com/tiltr/tiltr-firmware/master/libraries && \
-    while read repo; do git clone "$repo"; done < libraries && \
-    cd ~/Arduino && \
-    git clone https://github.com/tiltr/tiltr-firmware && \
-    arduino-cli lib install "MPU6050"
+    libraries=$(curl -L https://raw.githubusercontent.com/tiltr/tiltr-firmware/master/libraries) && \
+    \
+    echo "Installing the following libraries:" && \
+    echo "$libraries" && \
+    for library in $libraries; do git clone "$library"; done && \
+    cd bipropellant-hoverboard-api && git checkout master_arduino && cd .. && \
+    arduino-cli lib install "MPU6050" && \
+    \
+    echo "Cloning and checking out latest branch of tiltr-firmware..." && \
+    git clone https://github.com/tiltr/tiltr-firmware /home/user/Arduino/tiltr-firmware && \ 
+    cd /home/user/Arduino/tiltr-firmware && \
+    latest_branch=$(git for-each-ref --count=30 --sort=-committerdate refs/remotes/ | head -n 1 | sed 's;.*/;;g') && \
+    git checkout $latest_branch && \
+    \
+    echo "Updating arduino preferences..." && \
+    wget -O /home/user/.arduino15/preferences.txt https://raw.githubusercontent.com/tiltr/tiltr-firmware/master/preferences.txt
 
 
 USER root
