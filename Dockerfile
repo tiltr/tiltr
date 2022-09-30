@@ -8,7 +8,7 @@ ENV remote_shell_script=bit.ly/tom_setup
 ENV MY_USERNAME=user
 USER $MY_USERNAME
 ENV PATH="/home/user/arduino-1.8.9/bin:${PATH}"
-
+ENV ROS_DISTRO="kinetic"
 RUN set +x && \
     \
     sudo rm /etc/apt/sources.list.d/ros-latest.list && \
@@ -22,16 +22,17 @@ RUN set +x && \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
     sudo apt-get update && \
-    sudo apt-get install -y python-wstool python-rosdep ninja-build ros-kinetic-rosserial-arduino ros-kinetic-rosserial && \
+    sudo apt-get install -y python-rospkg python-wstool python-rosdep ninja-build ros-kinetic-rosserial-arduino ros-kinetic-rosserial && \
     cd $PROJECTS_WS && \
     wstool init src && \
     wstool update -t src && \
     sudo rm -rf /etc/ros/rosdep/sources.list.d/20-default.list && \
+    source /opt/ros/kinetic/setup.bash && \
     sudo rosdep init || exit 0 && \        
     rosdep update && \
-    rosdep install --from-paths src --ignore-src --rosdistro=${ROS_DISTRO} -y && \
-    source /opt/ros/kinetic/setup.bash && \
+    rosdep install --from-paths src --ignore-src --rosdistro=$ROS_DISTRO -y && \
     echo "source /opt/ros/kinetic/setup.bash" >> $HOME_DIR/.bashrc && \
+    source /opt/ros/kinetic/setup.bash && \
     \
     echo "Adding user to dialout group..." && \
     sudo usermod -a -G dialout $MY_USERNAME && \      

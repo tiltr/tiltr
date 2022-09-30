@@ -1,6 +1,15 @@
 # wheely_good_robot
 Repo for the ROS components of the bigger balance bot (and dockerfiles for the dev environment)
 
+## How to build
+
+```bash
+docker build . -t tiltr/base-dev:latest
+ocker build - < Dockerfile_add_cartographer -t tiltr_catrographer
+docker create --privileged --net=host -it --gpus all -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -e QT_X11_NO_MITSHM=1 -e XDG_RUNTIME_DIR=/run/user/1000 -e LOCAL_USER_ID=$(id -u) --name tilter_cartographer tiltr/cartographer-dev:latest
+docker start tilter_cartographer
+```
+
 ## Build environment
 
 Arduino works, but currently trialing cubemx/truestudio for cmsis HAL 
