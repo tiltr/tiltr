@@ -11,6 +11,9 @@ ENV PATH="/home/user/arduino-1.8.9/bin:${PATH}"
 
 RUN set +x && \
     \
+    sudo rm /etc/apt/sources.list.d/ros-latest.list && \
+    echo "deb http://packages.ros.org/ros/ubuntu xenial main" | sudo tee /etc/apt/sources.list.d/ros-latest.list && \
+    sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
     echo "Running tom_setup..." && \
     wget -O /tmp/tom_setup "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" && \
     chmod +x /tmp/tom_setup && \
