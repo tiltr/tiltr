@@ -22,7 +22,7 @@ RUN set +x && \
     echo "Creating and initialising the workspace..." && \
     mkdir -p $PROJECTS_WS && \
     sudo apt-get update && \
-    sudo apt-get install -y python-rospkg python-wstool python-rosdep ninja-build ros-kinetic-rosserial-arduino ros-kinetic-rosserial && \
+    sudo apt-get install -y htop python-rospkg python-wstool python-rosdep ninja-build ros-kinetic-rosserial-arduino ros-kinetic-rosserial && \
     cd $PROJECTS_WS && \
     wstool init src && \
     wstool update -t src && \

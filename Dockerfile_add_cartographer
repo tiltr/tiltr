@@ -40,7 +40,12 @@ RUN set +x && \
     \
     echo "source $PROJECTS_WS/install_isolated/setup.bash" >> $HOME_DIR/.bashrc && \
     cd $PROJECTS_WS && \
-    catkin_make_isolated --install --use-ninja
+    catkin_make_isolated --install --use-ninja && \
+    \
+    echo "Downloading test bags..." && \
+    cd $HOME_DIR && \
+    ./download_test_bag.sh && \
+    ./download_303_bag.sh
 
 
 USER root
